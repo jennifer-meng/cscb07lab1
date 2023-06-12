@@ -21,11 +21,26 @@ public class Polynomial {
 		line = line.replace("-", "+-");
         String[] items = line.split("\\+");
 
+
         this.coeffcients = new double[items.length];
         this.exponents = new int[items.length];
 
-        for (int i = 0; i < items.length; i++) {         
-            String[] item = items[i].split("x"); 
+        String [] new_items;
+        if (items[0].equals("")) {
+            new_items = new String[items.length - 1];
+            for (int i = 1; i < items.length; i++)
+                new_items[i-1] = items[i];
+        }
+        else {
+            new_items = new String[items.length - 1];
+            for (int i = 0; i < items.length; i++)
+                new_items[i] = items[i];
+        }
+
+
+        for (int i = 0; i < new_items.length; i++) {
+            String[] item = new_items[i].split("x");
+
             this.coeffcients[i] = Double.parseDouble(item[0]);
             if(item.length==1) {
             	this.exponents[i] = 0;
@@ -184,12 +199,18 @@ public class Polynomial {
 
             line += this.coeffcients[i] + "x" + this.exponents[i] + "+";
         }
+        line = line
+                .replace("+-", "-")     //
+                .replace("x0", "")      //
+                .replace(".0", "")      //
+                .replace("+end", "");  // to remove the last '+' sign
 
-        line += "end";
-        line = line.replace("+-", "-"); 
-        line = line.replace("x0", "");         
-        line = line.replace(".0", "");
-        line = line.replace("+end", "");
+
+//        line += "end";
+//        line = line.replace("+-", "-"); 
+//        line = line.replace("x0", "");         
+//        line = line.replace(".0", "");
+//        line = line.replace("+end", "");
         write.write(line);
         write.close();
     }
